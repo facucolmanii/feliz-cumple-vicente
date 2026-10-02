@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tenés un regalo 🎁</title>
+<!-- Vista previa en WhatsApp: sin imagen a propósito, para no arruinar la sorpresa -->
+<meta property="og:title" content="Tenés un regalo 🎁">
+<meta property="og:description" content="Abrilo cuando estés listo.">
+<meta name="theme-color" content="#3FB4D8">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cielo:#5DE1E3;
+    --azul:#3FB4D8;
+    --atardecer:#B98A6C;
+    --uniforme:#1D3B73;
+    --halo:#F4C24A;
+    --halo-claro:#FFF1B8;
+    --tinta:#0F2140;
+    --papel:#FFFDF7;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:var(--tinta);
+    background:linear-gradient(180deg,var(--cielo) 0%,var(--azul) 55%,var(--atardecer) 100%) fixed;
+    background-color:var(--azul);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---------- Pantalla 1: la invitación ---------- */
+  .intro{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(28px,6vh,56px);
+    padding:24px;text-align:center;
+    transition:opacity .5s ease .7s;
+  }
+  .intro.oculto{opacity:0;pointer-events:none}
+  .para{
+    margin:0;font-size:clamp(1.1rem,3.5vw,1.35rem);font-weight:400;
+    color:rgba(15,33,64,.75);
+  }
+  .nombre{
+    margin:.1em 0 0;
+    font-size:clamp(3rem,15vw,7.5rem);
+    font-weight:800;line-height:.92;letter-spacing:-.035em;
+    color:var(--papel);
+    text-shadow:0 2px 0 var(--uniforme),0 10px 30px rgba(15,33,64,.25);
+    overflow-wrap:anywhere;
+  }
+
+  /* El botón es el halo del retrato */
+  .halo-btn{
+    position:relative;
+    border:0;background:none;cursor:pointer;
+    padding:0;width:min(78vw,300px);aspect-ratio:3/1.15;
+    font:inherit;color:var(--tinta);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .halo-btn .anillo{
+    position:absolute;inset:0;border-radius:50%;
+    border:clamp(9px,2.6vw,13px) solid var(--halo);
+    box-shadow:
+      0 0 0 3px var(--halo-claro) inset,
+      0 0 0 2px var(--halo-claro),
+      0 0 26px 6px rgba(255,214,102,.75),
+      0 0 60px 14px rgba(255,214,102,.35);
+    animation:flotar 3.2s ease-in-out infinite;
+  }
+  .halo-btn .texto{
+    position:relative;display:block;
+    font-weight:700;font-size:clamp(1.05rem,4vw,1.25rem);
+  }
+  .halo-btn:focus-visible{outline:3px solid var(--papel);outline-offset:10px;border-radius:50%}
+  .halo-btn:active .anillo{transform:scale(.96)}
+  @keyframes flotar{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+  }
+
+  /* ---------- Pantalla 2: el regalo ---------- */
+  .regalo{
+    position:relative;min-height:100%;
+    display:flex;flex-direction:column;align-items:center;
+    padding:clamp(20px,5vh,48px) 18px 56px;
+    clip-path:circle(0% at var(--x,50%) var(--y,60%));
+    visibility:hidden;
+  }
+  .regalo.abierto{
+    visibility:visible;
+    clip-path:circle(150% at var(--x,50%) var(--y,60%));
+    transition:clip-path 1.1s cubic-bezier(.65,0,.35,1);
+  }
+  .regalo.listo{clip-path:none}
+
+  .marco{
+    width:100%;max-width:560px;margin:0;
+    background:var(--papel);
+    padding:10px 10px 0;
+    border-radius:6px;
+    box-shadow:0 2px 0 rgba(29,59,115,.25),0 24px 60px -12px rgba(15,33,64,.45);
+    transform:rotate(-1.2deg);
+  }
+  .marco img{display:block;width:100%;height:auto;border-radius:3px}
+  .marco figcaption{
+    font-family:"Caveat","Segoe Print","Bradley Hand",cursive;
+    font-size:1.5rem;font-weight:700;text-align:center;
+    padding:6px 0 10px;color:var(--uniforme);
+  }
+
+  .carta{
+    width:100%;max-width:520px;margin-top:clamp(32px,6vh,52px);
+    text-align:center;color:var(--papel);
+  }
+  .carta h1{
+    margin:0;font-size:clamp(2.1rem,8vw,3.4rem);font-weight:800;
+    line-height:1;letter-spacing:-.03em;
+    text-shadow:0 2px 0 var(--uniforme);
+  }
+  .carta .mensaje{
+    margin:22px auto 0;max-width:30ch;
+    font-family:"Caveat","Segoe Print","Bradley Hand",cursive;
+    font-size:clamp(1.55rem,5.6vw,1.9rem);font-weight:500;line-height:1.3;
+    color:var(--tinta);
+    white-space:pre-line;
+  }
+  .carta .firma{
+    margin:14px 0 0;
+    font-family:"Caveat","Segoe Print","Bradley Hand",cursive;
+    font-size:clamp(1.6rem,5.8vw,2rem);font-weight:700;color:var(--uniforme);
+  }
+  .descargar{
+    display:inline-block;margin-top:34px;
+    padding:12px 22px;border-radius:999px;
+    background:var(--uniforme);color:var(--papel);
+    font-weight:700;font-size:1rem;text-decoration:none;
+  }
+  .descargar:focus-visible{outline:3px solid var(--halo);outline-offset:3px}
+
+  canvas#confeti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+
+  @media (prefers-reduced-motion:reduce){
+    .halo-btn .anillo{animation:none}
+    .regalo.abierto{transition:none}
+    .intro{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<section class="intro" id="intro">
+  <div>
+    <p class="para">Para</p>
+    <p class="nombre" id="nombreIntro"></p>
+  </div>
+  <button class="halo-btn" id="abrir" type="button" aria-label="Abrir tu regalo">
+    <span class="anillo" aria-hidden="true"></span>
+    <span class="texto">Abrí tu regalo</span>
+  </button>
+</section>
+
+<main class="regalo" id="regalo" aria-hidden="true">
+  <figure class="marco">
+    <img src="retrato.jpg" alt="Retrato ilustrado con su perro" width="1200" height="1312">
+    <figcaption id="pie"></figcaption>
+  </figure>
+
+  <article class="carta">
+    <h1 id="titulo"></h1>
+    <p class="mensaje" id="mensaje"></p>
+    <p class="firma" id="firma"></p>
+    <a class="descargar" href="retrato.jpg" download="retrato.jpg">Descargar el retrato</a>
+  </article>
+</main>
+
+<canvas id="confeti" aria-hidden="true"></canvas>
+
+<script>
+/* =========================================================
+   EDITÁ SOLO ESTO
+   ========================================================= */
+const CONFIG = {
+  nombre:  "Vicente",
+  mensaje: "Feliz cumpleaños. Te merecés todo lo lindo del mundo, y un poco más.",
+  firma:   "",   // ej: "Con amor, Yas"
+  pie:     "Feliz cumple 🎂"   // texto bajo el retrato
+};
+/* ========================================================= */
+
+const $ = id => document.getElementById(id);
+const nombre = CONFIG.nombre.trim();
+
+$("nombreIntro").textContent = nombre || "vos";
+$("titulo").textContent = nombre ? `Feliz cumple, ${nombre}` : "Feliz cumple";
+$("mensaje").textContent = CONFIG.mensaje;
+$("firma").textContent = CONFIG.firma;
+$("pie").textContent = CONFIG.pie;
+if (!CONFIG.firma.trim()) $("firma").remove();
+
+const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+$("abrir").addEventListener("click", e => {
+  const b = e.currentTarget.getBoundingClientRect();
+  const regalo = $("regalo");
+  regalo.style.setProperty("--x", `${b.left + b.width / 2}px`);
+  regalo.style.setProperty("--y", `${b.top + b.height / 2}px`);
+  regalo.classList.add("abierto");
+  regalo.removeAttribute("aria-hidden");
+  $("intro").classList.add("oculto");
+  setTimeout(() => {
+    regalo.classList.add("listo");
+    $("intro").remove();
+  }, reducido ? 0 : 1250);
+  if (!reducido) setTimeout(confeti, 500);
+});
+
+/* Confeti con los colores del retrato */
+function confeti() {
+  const c = $("confeti"), ctx = c.getContext("2d");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const W = innerWidth, H = innerHeight;
+  c.width = W * dpr; c.height = H * dpr; ctx.scale(dpr, dpr);
+  const colores = ["#F4C24A", "#FFF1B8", "#1D3B73", "#B9784A", "#C8352B", "#FFFDF7"];
+  const piezas = Array.from({ length: 140 }, () => ({
+    x: W / 2 + (Math.random() - .5) * 60,
+    y: H * .35,
+    vx: (Math.random() - .5) * 14,
+    vy: -Math.random() * 14 - 4,
+    w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+    r: Math.random() * Math.PI, vr: (Math.random() - .5) * .3,
+    color: colores[(Math.random() * colores.length) | 0]
+  }));
+  let t = 0;
+  (function frame() {
+    ctx.clearRect(0, 0, W, H);
+    piezas.forEach(p => {
+      p.vy += .32; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r)));
+      ctx.restore();
+    });
+    if (++t < 220) requestAnimationFrame(frame); else ctx.clearRect(0, 0, W, H);
+  })();
+}
+</script>
+</body>
+</html>
