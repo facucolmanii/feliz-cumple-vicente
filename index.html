@@ -191,9 +191,10 @@
    ========================================================= */
 const CONFIG = {
   nombre:  "Vicente",
-  mensaje: "Feliz cumpleaños. Te merecés todo lo lindo del mundo, y un poco más.",
-  firma:   "",   // ej: "Con amor, Yas"
-  pie:     "Feliz cumple 🎂"   // texto bajo el retrato
+  titulo:  "Feliz dos meses wawito 🤍🖤",
+  mensaje: "Un mes más juntos, y cada día te quiero más.\nGracias por elegirme.",
+  firma:   "Con amor, Yas",
+  pie:     "Feliz cumplemes 🤍🖤"   // texto bajo el retrato
 };
 /* ========================================================= */
 
@@ -201,7 +202,7 @@ const $ = id => document.getElementById(id);
 const nombre = CONFIG.nombre.trim();
 
 $("nombreIntro").textContent = nombre || "vos";
-$("titulo").textContent = nombre ? `Feliz cumple, ${nombre}` : "Feliz cumple";
+$("titulo").textContent = CONFIG.titulo || (nombre ? `Feliz cumplemes, ${nombre}` : "Feliz cumplemes");
 $("mensaje").textContent = CONFIG.mensaje;
 $("firma").textContent = CONFIG.firma;
 $("pie").textContent = CONFIG.pie;
